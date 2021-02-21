@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <style>
+        td
+        {
+            min-width:60px;
+            text-align:center;
+        }
+        input[type=button]
+        {
+            min-width:60px;
+        }
+    </style>
+    <div>
+        <game />
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td></td>
+                <td>
+                    <input class="bc" type="button" value="UP" />
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input class="bc" type="button" value="LEFT" />
+                </td>
+                <td>
+                    <input class="bc" type="button" value="BOMB" />
+                </td>
+                <td>
+                    <input class="bc" type="button" value="RIGHT" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input class="bc" type="button" value="DOWN" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    var temp = document.getElementsByClassName("bc");
+
+    for (var i = 0; i < temp.length; i++)
+    {
+        temp[i].addEventListener("click", cf);
+    }
+
+    function cf(e)
+    {
+        document.location.href = e.currentTarget.value;
+    }
+</script>

@@ -7,6 +7,7 @@ namespace ConsoleApp3
 {
     class Program
     {
+        public static Game game = new Game();
         static String SiteFolder = "Files";
         static void Main(string[] args)
         {
@@ -15,6 +16,8 @@ namespace ConsoleApp3
             listener.Start();
 
             Console.WriteLine("listening");
+
+            game.Init(10, 10);
 
             while (true)
             {
@@ -27,7 +30,8 @@ namespace ConsoleApp3
 
                 String responsestring = "hi from server. you sent: "+ rawurl;
 
-                String tfile = GetFileContent(rawurl);
+                String tfile = GetFileContent("Game");
+                tfile = tfile.Replace("<game />", rawurl.TrimStart('/'));
 
                 byte[] buffer = Encoding.UTF8.GetBytes(tfile);
                 response.ContentLength64 = buffer.Length;
@@ -37,7 +41,6 @@ namespace ConsoleApp3
 
                 Console.WriteLine($"String {responsestring} sent to client");
             }
-
         }
 
         static String GetFileContent(String filename)
@@ -52,6 +55,7 @@ namespace ConsoleApp3
             {
                 return "";
             }
+            
         }
 
         static String AssembleFileName(String filename)
