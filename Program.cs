@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text;
+using TheGame;
 
 namespace ConsoleApp3
 {
@@ -9,6 +11,7 @@ namespace ConsoleApp3
     {
         public static Game game = new Game();
         static String SiteFolder = "Files";
+
         static void Main(string[] args)
         {
             HttpListener listener = new HttpListener();
@@ -17,7 +20,8 @@ namespace ConsoleApp3
 
             Console.WriteLine("listening");
 
-            game.Init(10, 10);
+            game.Init(10, 5);
+            String GameField = game.RenderField();
 
             while (true)
             {
@@ -31,7 +35,7 @@ namespace ConsoleApp3
                 String responsestring = "hi from server. you sent: "+ rawurl;
 
                 String tfile = GetFileContent("Game");
-                tfile = tfile.Replace("<game />", rawurl.TrimStart('/'));
+                tfile = tfile.Replace("<game />", GameField);
 
                 byte[] buffer = Encoding.UTF8.GetBytes(tfile);
                 response.ContentLength64 = buffer.Length;
