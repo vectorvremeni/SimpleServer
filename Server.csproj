@@ -7,8 +7,11 @@
 
   <ItemGroup>
     <Compile Remove="TheGame\**" />
+    <Compile Remove="UnitTestProject1\**" />
     <EmbeddedResource Remove="TheGame\**" />
+    <EmbeddedResource Remove="UnitTestProject1\**" />
     <None Remove="TheGame\**" />
+    <None Remove="UnitTestProject1\**" />
   </ItemGroup>
 
   <ItemGroup>
