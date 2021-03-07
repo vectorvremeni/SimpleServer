@@ -9,7 +9,7 @@ namespace TheGame
         public GameCell[,] GameField;
         public static String CellEmpty = "O";
         public static String CellUser = "X";
-        public GamePoint User = new GamePoint(5,4);
+        public GamePoint User = new GamePoint(0,0);
         
         public int DimX
         {
@@ -81,7 +81,7 @@ namespace TheGame
             {
                 User.Y--;
             }
-            else if (directoin == "DOWN" && User.X < DimY - 1)
+            else if (directoin == "DOWN" && User.Y < DimY - 1)
             {
                 User.Y++;
             }

@@ -22,5 +22,18 @@ namespace GameTests
             Assert.AreEqual(10, g.DimX);
             Assert.AreEqual(5, g.DimY);
         }
+
+        [TestMethod]
+        public void A2_MoveUser_Test()
+        {
+            Game g = new Game();
+            g.Init(5, 5);
+
+            Assert.AreEqual(0, g.User.X);
+
+            g.MoveUser("RIGHT");
+
+            Assert.AreEqual(1, g.User.X);
+        }
     }
 }
