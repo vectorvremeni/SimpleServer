@@ -74,5 +74,25 @@ namespace TheGame
             }
             return temp;
         }
+        
+        public void MoveUser(string directoin)
+        {
+            if (directoin == "UP" && User.Y != 0)
+            {
+                User.Y--;
+            }
+            else if (directoin == "DOWN" && User.X < DimY - 1)
+            {
+                User.Y++;
+            }
+            else if (directoin == "RIGHT" && User.X < DimX -1)
+            {
+                User.X++;
+            }
+            else if (directoin == "LEFT" && User.X != 0)
+            {
+                User.X--;
+            }
+        }
     }
 }

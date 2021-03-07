@@ -21,10 +21,11 @@ namespace ConsoleApp3
             Console.WriteLine("listening");
 
             game.Init(10, 5);
-            String GameField = game.RenderField();
+            
 
             while (true)
             {
+
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
 
@@ -34,6 +35,8 @@ namespace ConsoleApp3
 
                 String responsestring = "hi from server. you sent: "+ rawurl;
 
+                game.MoveUser(rawurl.TrimStart('/'));
+                String GameField = game.RenderField();
                 String tfile = GetFileContent("Game");
                 tfile = tfile.Replace("<game />", GameField);
 
