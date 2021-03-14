@@ -9,8 +9,15 @@ namespace TheGame
         public GameCell[,] GameField;
         public static String CellEmpty = "O";
         public static String CellUser = "X";
-        public GamePoint User = new GamePoint(0,0);
-        
+        public GamePoint User = new GamePoint(0, 0);
+
+        public IRenderer _r;
+
+        public Game(IRenderer r)
+        {
+            _r = r;
+        }
+
         public int DimX
         {
             get
@@ -44,9 +51,9 @@ namespace TheGame
         public void Init(int x, int y)
         {
             GameField = new GameCell[y, x];
-            for(int yy=0; yy<y; yy++)
+            for (int yy = 0; yy < y; yy++)
             {
-                for(int xx=0;xx<x;xx++)
+                for (int xx = 0; xx < x; xx++)
                 {
                     GameField[yy, xx] = new GameCell();
                 }
@@ -55,7 +62,48 @@ namespace TheGame
 
         public String RenderField()
         {
+            String temp = _r.Render(GameField, User, DimX, DimY, CellUser, CellEmpty);
+            return temp;
+        }
 
+        public void MoveUser(string directoin)
+        {
+            if (directoin == "UP" && User.Y != 0)
+            {
+                User.Y--;
+            }
+            else if (directoin == "DOWN" && User.Y < DimY - 1)
+            {
+                User.Y++;
+            }
+            else if (directoin == "RIGHT" && User.X < DimX - 1)
+            {
+                User.X++;
+            }
+            else if (directoin == "LEFT" && User.X != 0)
+            {
+                User.X--;
+            }
+        }
+    }
+
+    public interface IRenderer
+    {
+        public String Render(GameCell[,] GameField,
+            GamePoint User,
+            int DimX,
+            int DimY,
+            String CellUser, String CellEmpty);
+    }
+
+    public class Renderer:IRenderer
+    {
+        public String Render(GameCell[,] GameField,
+            GamePoint User,
+            int DimX,
+            int DimY,
+            String CellUser, String CellEmpty)
+        {
             String temp = "";
             for (int yy = 0; yy < DimY; yy++)
             {
@@ -70,29 +118,37 @@ namespace TheGame
                         temp += CellEmpty;
                     }
                 }
-                temp += Environment.NewLine+"<br />";
+                temp += Environment.NewLine + "<br />";
             }
             return temp;
         }
-        
-        public void MoveUser(string directoin)
+    }
+
+    public class ConsoleRenderer:IRenderer
+    {
+        public String Render(GameCell[,] GameField,
+            GamePoint User,
+            int DimX,
+            int DimY,
+            String CellUser, String CellEmpty)
         {
-            if (directoin == "UP" && User.Y != 0)
+            String temp = "";
+            for (int yy = 0; yy < DimY; yy++)
             {
-                User.Y--;
+                for (int xx = 0; xx < DimX; xx++)
+                {
+                    if (yy == User.Y && xx == User.X)
+                    {
+                        temp += CellUser;
+                    }
+                    else
+                    {
+                        temp += CellEmpty;
+                    }
+                }
+                temp += Environment.NewLine;
             }
-            else if (directoin == "DOWN" && User.Y < DimY - 1)
-            {
-                User.Y++;
-            }
-            else if (directoin == "RIGHT" && User.X < DimX -1)
-            {
-                User.X++;
-            }
-            else if (directoin == "LEFT" && User.X != 0)
-            {
-                User.X--;
-            }
+            return temp;
         }
     }
 }

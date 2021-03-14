@@ -9,11 +9,13 @@ namespace ConsoleApp3
 {
     class Program
     {
-        public static Game game = new Game();
+        public static Game game;
         static String SiteFolder = "Files";
 
         static void Main(string[] args)
         {
+            Renderer r = new Renderer();
+            game = new Game(r);
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://*:55555/");
             listener.Start();
