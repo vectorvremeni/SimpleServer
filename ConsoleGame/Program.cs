@@ -9,11 +9,19 @@ namespace ConsoleGame
         {
             ConsoleRenderer r = new ConsoleRenderer();
 
-            Game g = new Game(r);
+            /*
+            
+            var cls = construict(TypeName)
+
+            cls.call(loadgame)
+            
+            */
+
+            GoGame g = new GoGame(r);
             g.Init(5, 5);
 
-            g.MoveUser("RIGHT");
-            g.MoveUser("RIGHT");
+            g.MoveUser(GoGame.D_RIGHT);
+            g.MoveUser(GoGame.D_DOWN);
 
             String temp = g.RenderField();
 

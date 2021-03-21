@@ -10,13 +10,13 @@ namespace GameTests
         public void A1_Dimensions_Test()
         {
             Renderer r = new Renderer();
-            Game g = new Game(r);
+            GoGame g = new GoGame(r);
             g.Init(5, 5);
 
             Assert.AreEqual(5, g.DimX);
             Assert.AreEqual(5, g.DimY);
 
-            g = new Game(r);
+            g = new GoGame(r);
 
             g.Init(10, 5);
 
@@ -28,7 +28,7 @@ namespace GameTests
         public void A2_MoveUser_Test()
         {
             Renderer r = new Renderer();
-            Game g = new Game(r);
+            GoGame g = new GoGame(r);
             g.Init(5, 5);
 
             Assert.AreEqual(0, g.User.X);

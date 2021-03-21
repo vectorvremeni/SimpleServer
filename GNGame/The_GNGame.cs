@@ -2,7 +2,7 @@
 
 namespace GNGame
 {
-    public class The_GNGame
+    public class GuessGame
     {
         public static string Gr_lose = "lose";
         public static string Gr_less = "less";

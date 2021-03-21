@@ -12,27 +12,26 @@ namespace GameTests
     public class GNGameTests
     {
         [TestMethod]
-        public void test1()
+        public void T1_1()
         {
-            The_GNGame g = new The_GNGame();
+            GuessGame g = new GuessGame();
             g.init(3);
             g.init_test(5);
 
             string r1 = g.guess(3);
-            Assert.AreEqual(The_GNGame.Gr_less,r1);
+            Assert.AreEqual(GuessGame.Gr_less,r1);
 
             string r2 = g.guess(8);
-            Assert.AreEqual(The_GNGame.Gr_more, r2);
+            Assert.AreEqual(GuessGame.Gr_more, r2);
 
             string r3 = g.guess(10);
-            Assert.AreEqual(The_GNGame.Gr_lose, r3);
+            Assert.AreEqual(GuessGame.Gr_lose, r3);
 
             g.init(3);
             g.init_test(5);
 
             string r4 = g.guess(5);
-            Assert.AreEqual(The_GNGame.Gr_equal, r4);
+            Assert.AreEqual(GuessGame.Gr_equal, r4);
         }
-        
     }
 }

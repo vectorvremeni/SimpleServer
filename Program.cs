@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GNGame;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -9,13 +10,14 @@ namespace ConsoleApp3
 {
     class Program
     {
-        public static Game game;
+        public static GoGame game;
         static String SiteFolder = "Files";
 
         static void Main(string[] args)
         {
             Renderer r = new Renderer();
-            game = new Game(r);
+            game = new GoGame(r);
+
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://*:55555/");
             listener.Start();

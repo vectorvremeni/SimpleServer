@@ -4,16 +4,21 @@ using System.Text;
 
 namespace TheGame
 {
-    public class Game
+    public class GoGame
     {
         public GameCell[,] GameField;
         public static String CellEmpty = "O";
         public static String CellUser = "X";
         public GamePoint User = new GamePoint(0, 0);
 
+        public static String D_UP = "UP";
+        public static String D_DOWN = "DOWN";
+        public static String D_LEFT = "LEFT";
+        public static String D_RIGHT = "RIGHT";
+
         public IRenderer _r;
 
-        public Game(IRenderer r)
+        public GoGame(IRenderer r)
         {
             _r = r;
         }
@@ -68,19 +73,19 @@ namespace TheGame
 
         public void MoveUser(string directoin)
         {
-            if (directoin == "UP" && User.Y != 0)
+            if (directoin == D_UP && User.Y != 0)
             {
                 User.Y--;
             }
-            else if (directoin == "DOWN" && User.Y < DimY - 1)
+            else if (directoin == D_DOWN && User.Y < DimY - 1)
             {
                 User.Y++;
             }
-            else if (directoin == "RIGHT" && User.X < DimX - 1)
+            else if (directoin == D_RIGHT && User.X < DimX - 1)
             {
                 User.X++;
             }
-            else if (directoin == "LEFT" && User.X != 0)
+            else if (directoin == D_LEFT && User.X != 0)
             {
                 User.X--;
             }
