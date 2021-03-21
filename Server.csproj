@@ -6,10 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ConsoleGame\**" />
+    <Compile Remove="GNGame\**" />
+    <Compile Remove="Testing\**" />
     <Compile Remove="TheGame\**" />
     <Compile Remove="UnitTestProject1\**" />
+    <EmbeddedResource Remove="ConsoleGame\**" />
+    <EmbeddedResource Remove="GNGame\**" />
+    <EmbeddedResource Remove="Testing\**" />
     <EmbeddedResource Remove="TheGame\**" />
     <EmbeddedResource Remove="UnitTestProject1\**" />
+    <None Remove="ConsoleGame\**" />
+    <None Remove="GNGame\**" />
+    <None Remove="Testing\**" />
     <None Remove="TheGame\**" />
     <None Remove="UnitTestProject1\**" />
   </ItemGroup>
