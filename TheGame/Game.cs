@@ -18,11 +18,20 @@ namespace TheGame
 
         public IRenderer _r;
 
+        /// <summary>
+        /// принуждаем игру принять в конструкторе зависимость - конкретрный рендерер. этим мы обезопасиваем себя от неправильного использования нашего класса другими программистами.
+        /// если они захотят создать наш тип, не заполня его рендерер у них не получится
+        /// в то же время никто им не мешает сделать свой рендерер, который будет работать так как они хотят, для этого им нужно будет реализовать интерфейс
+        /// </summary>
+        /// <param name="r"></param>
         public GoGame(IRenderer r)
         {
             _r = r;
         }
 
+        /// <summary>
+        /// Property - геттер/сеттер, выглядит как переменная - работает как функция
+        /// </summary>
         public int DimX
         {
             get
@@ -35,6 +44,9 @@ namespace TheGame
             }
         }
 
+        /// <summary>
+        /// я не хочу помнить о размерностях массива, поэтому просто оборачиваю это в функциональность
+        /// </summary>
         public int DimY
         {
             get
@@ -49,7 +61,7 @@ namespace TheGame
 
 
         /// <summary>
-        /// fill initial field
+        /// при старте игры заполняем поле объектами GameCell
         /// </summary>
         /// <param name="x">width</param>
         /// <param name="y">height</param>
@@ -65,12 +77,20 @@ namespace TheGame
             }
         }
 
+        /// <summary>
+        /// ну рендерим теперь... почему так просто? за всё отвечает рендерер, мы просто возвращаем то что он нарендерил
+        /// </summary>
+        /// <returns></returns>
         public String RenderField()
         {
             String temp = _r.Render(GameField, User, DimX, DimY, CellUser, CellEmpty);
             return temp;
         }
 
+        /// <summary>
+        /// перемещаем пользователя, меняя его координаты
+        /// </summary>
+        /// <param name="directoin"></param>
         public void MoveUser(string directoin)
         {
             if (directoin == D_UP && User.Y != 0)
@@ -92,7 +112,12 @@ namespace TheGame
         }
     }
 
-    public class Renderer:IRenderer
+    /// <summary>
+    /// вот например - этот рендерер хочет встроиться в конструктор класса игры. там написано, что она принимает только тех, кто реализует интерфейс IRenderer (тоесть имеет функцию Render)
+    /// как она устроена пока не важно, потому что она должна вернуть String - пусть делает что хочет, главное что сигнатура совпадает и её можно вызывать
+    /// мы говорим ладно, давайте реализовывать этот интерфейс - пишем эту функцию, она смотрит где юзер и если он там, возвращает то что ему передали как юзер, если нет то то, что считается пустой клеткой, возвращает отрендеренное поле
+    /// </summary>
+    public class HTMLRenderer:IRenderer
     {
         public String Render(GameCell[,] GameField,
             GamePoint User,
@@ -120,6 +145,10 @@ namespace TheGame
         }
     }
 
+
+    /// <summary>
+    /// а вот другой рендерер, который работает точно так же, но возвращает уже версию для консоли - без <br/>
+    /// </summary>
     public class ConsoleRenderer:IRenderer
     {
         public String Render(GameCell[,] GameField,

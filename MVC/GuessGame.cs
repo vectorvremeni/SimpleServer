@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Server.MVC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server
+namespace Server.MVC
 {
-    public class GuessGame
+    public class GuessGame:Controller
     {
         public String Index()
         {

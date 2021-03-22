@@ -9,7 +9,7 @@ namespace GameTests
         [TestMethod]
         public void A1_Dimensions_Test()
         {
-            Renderer r = new Renderer();
+            HTMLRenderer r = new HTMLRenderer();
             GoGame g = new GoGame(r);
             g.Init(5, 5);
 
@@ -27,7 +27,7 @@ namespace GameTests
         [TestMethod]
         public void A2_MoveUser_Test()
         {
-            Renderer r = new Renderer();
+            HTMLRenderer r = new HTMLRenderer();
             GoGame g = new GoGame(r);
             g.Init(5, 5);
 

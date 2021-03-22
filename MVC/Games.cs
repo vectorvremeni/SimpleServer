@@ -1,7 +1,7 @@
 ﻿using Server.MVC;
 using System;
 
-namespace Server
+namespace Server.MVC
 {
     public class Games:Controller
     {
