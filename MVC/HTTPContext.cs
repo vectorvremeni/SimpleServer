@@ -6,23 +6,49 @@ using System.Threading.Tasks;
 
 namespace Server.MVC
 {
-    /// <summary>
-    /// тут мы будем хранить информацию о том, что хочет пользователь
-    /// </summary>
     public class HTTPContext
     {
-        /// <summary>
-        /// он хочет чтобы сервер создал этот контроллер
-        /// если пользователь ничего не передал, то вызываем контроллер поумолчанию - Home
-        /// </summary>
         public String Controller { get; set; } = "Home";
-        /// <summary>
-        /// вызвал у него этот метод (если ничего не передали, то Index - таким образом, если мы хотим просто) зайти на сайт то нам не надо указывать ничего, просто название сайта
-        /// </summary>
+       
         public String Action { get; set; } = "Index";
-        /// <summary>
-        /// и передал ему эти параметры
-        /// </summary>
-        public String Params { get; set; }
-    }
+      
+        public Dictionary<String,String> Params { get; set; }
+
+        public static HTTPContext GetContext(String URL)
+		{
+			HTTPContext c = new HTTPContext();
+
+			String[] s = URL.Split('/');
+
+			if (s.Length > 0)
+			{
+				c.Controller = s[0];
+			}
+
+			if (s.Length > 1)
+			{
+				c.Action = s[1];
+			}
+
+			if (s.Length > 2)
+			{
+				Dictionary<string, string> tobj = new Dictionary<string, string>();
+				String [] tp = s[2].Split('&');
+				for (int i = 0; i < tp.Length; i++)
+				{
+					String[] ttp = tp[i].Split('=');
+					if (ttp.Length == 2)
+					{
+						tobj.Add(ttp[0], ttp[1]);
+					}
+					else
+					{
+						tobj.Add(ttp[0],"");
+					}
+				}
+				c.Params = tobj;
+			}
+			return c;
+		}
+	}
 }
