@@ -7,16 +7,19 @@
 
   <ItemGroup>
     <Compile Remove="ConsoleGame\**" />
+    <Compile Remove="DIContainer\**" />
     <Compile Remove="GNGame\**" />
     <Compile Remove="Testing\**" />
     <Compile Remove="TheGame\**" />
     <Compile Remove="UnitTestProject1\**" />
     <EmbeddedResource Remove="ConsoleGame\**" />
+    <EmbeddedResource Remove="DIContainer\**" />
     <EmbeddedResource Remove="GNGame\**" />
     <EmbeddedResource Remove="Testing\**" />
     <EmbeddedResource Remove="TheGame\**" />
     <EmbeddedResource Remove="UnitTestProject1\**" />
     <None Remove="ConsoleGame\**" />
+    <None Remove="DIContainer\**" />
     <None Remove="GNGame\**" />
     <None Remove="Testing\**" />
     <None Remove="TheGame\**" />

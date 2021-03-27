@@ -28,13 +28,10 @@ namespace Server
 			{
 				Assembly asm = Assembly.GetCallingAssembly();
 
-
 				List<TypeInfo> Controllers = asm.DefinedTypes.Where(x => x.BaseType == typeof(Controller)).ToList();
-
 
 				AssemblyName an = asm.GetName();
 
-				
 				String ClassName = Controllers.Where(x => x.Name == ct.Controller).SingleOrDefault()?.FullName;
 
 				ObjectHandle tclass = Activator.CreateInstance(an.Name, ClassName);
@@ -47,13 +44,13 @@ namespace Server
 
 				if (ct.Action != null)
 				{
-					object[] prms = ct.Params.ToList().ConvertAll(x => (object?)x.Value).ToArray();
+					object[] prms = ct.Params.ToList().ConvertAll(x => x.Value).ToArray();
 
 					StringResult r = new StringResult { Content = type.GetMethod(ct.Action).Invoke(unwc, prms).ToString() };
 					return r;
 				}
 			}
-			return null;
+			return new StringResult {Content = "" };
 		}
 		
 	}

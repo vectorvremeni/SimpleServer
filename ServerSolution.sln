@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameTests", "Testing\GameTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGame", "ConsoleGame\ConsoleGame.csproj", "{BCC292C2-9592-451F-8CA3-D6453A19B215}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIContainer", "DIContainer\DIContainer.csproj", "{D7A650E0-7C1D-448C-8ED7-D884AB7A704F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{BCC292C2-9592-451F-8CA3-D6453A19B215}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCC292C2-9592-451F-8CA3-D6453A19B215}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCC292C2-9592-451F-8CA3-D6453A19B215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A650E0-7C1D-448C-8ED7-D884AB7A704F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A650E0-7C1D-448C-8ED7-D884AB7A704F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A650E0-7C1D-448C-8ED7-D884AB7A704F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A650E0-7C1D-448C-8ED7-D884AB7A704F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
