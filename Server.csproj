@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="DIContainer\DIContainer.csproj" />
     <ProjectReference Include="GNGame\GNGame.csproj" />
     <ProjectReference Include="TheGame\TheGame.csproj" />
   </ItemGroup>
