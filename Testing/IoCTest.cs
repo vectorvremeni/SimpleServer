@@ -19,6 +19,8 @@ namespace GameTests
 			container.Register<IWelcomer, Welcomer>();
 			container.Register<IWriter, ConsoleWriter>();
 
+            Type t = typeof(Welcomer);
+
 			var welcomer = container.Create<IWelcomer>();
 
             String w = "World";

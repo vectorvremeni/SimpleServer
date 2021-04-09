@@ -1,4 +1,5 @@
 ﻿using GNGame;
+using IoC;
 using Server;
 using Server.MVC;
 using System;
@@ -24,10 +25,16 @@ namespace ConsoleApp3
 
 		static void Main(string[] args)
 		{
+			var container = new IoCContainer();
+			ControllerFactory factory = new ControllerFactory(container);
+
+			container.Register<IRenderer,HTMLRenderer>();
+			container.Register<GoGame, GoGame>();
+
 			// создаём HTML версию рендерера
 			HTMLRenderer r = new HTMLRenderer();
 			// создаём объект игры и пробрасываем ему рендерер (внедрение через конструктор)
-			game = new GoGame(r);
+			//game = new GoGame(r);
 
 			// создаём слушатель HTTP запросов
 			HttpListener listener = new HttpListener();
@@ -40,7 +47,7 @@ namespace ConsoleApp3
 			Console.WriteLine("listening");
 
 			// инициализируем игру (ToDo: потом нужно это убрать в контроллер)
-			game.Init(10, 5);
+			//game.Init(10, 5);
 
 			// создаём бесконечный цикл чтобы слушать запросы с клиента
 			while (true)
@@ -68,7 +75,7 @@ namespace ConsoleApp3
 				// дальше идёт ветвление на MVC и просто файлы: если запрошен какойто файл, отдаём его. если нет точки в строке (признак расширения файла) то идём на MVC
 				if (!rawurl.Contains('.'))
 				{
-					IActionResult mvcres = ControllerFactory.GetResult(TrimmedURL);
+					IActionResult mvcres = factory.GetResult(TrimmedURL);
 					responsestring = mvcres.Content;
 				}
 				else

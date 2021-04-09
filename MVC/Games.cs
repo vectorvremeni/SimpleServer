@@ -1,13 +1,18 @@
 ﻿using Server.MVC;
 using System;
+using TheGame;
 
 namespace Server.MVC
 {
     public class Games:Controller
     {
-        public String Index()
+        public Games(GoGame g)
         {
-            return "Game List";
+
+        }
+        public String Index(String t)
+        {
+            return "Game List" + t;
         }
     }
 }

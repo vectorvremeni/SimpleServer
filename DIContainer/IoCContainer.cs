@@ -22,7 +22,7 @@ namespace IoC
             return (TInterface)Create(typeof(TInterface));
         }
 
-        private object Create(Type type)
+        public object Create(Type type)
         {
             var concreteType = types[type];
             var defaultConstructor = concreteType.GetConstructors()[0];
@@ -30,6 +30,11 @@ namespace IoC
             var parameters = defaultParams.Select(param => Create(param.ParameterType)).ToArray();
 
             return defaultConstructor.Invoke(parameters);
+        }
+
+        public void Register(Type type, Type instance)
+        {
+            types[type] = instance;
         }
     }
 }

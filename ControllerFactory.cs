@@ -1,4 +1,5 @@
-﻿using Server.MVC;
+﻿using IoC;
+using Server.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,12 @@ namespace Server
 	}
 	public class ControllerFactory
 	{
-		public static IActionResult GetResult(String URL)
+		IoCContainer services;
+        public ControllerFactory(IoCContainer services)
+        {
+			this.services = services;
+        }
+		public IActionResult GetResult(String URL)
 		{
 			HTTPContext ct = HTTPContext.GetContext(URL);
 
@@ -34,17 +40,17 @@ namespace Server
 
 				String ClassName = Controllers.Where(x => x.Name == ct.Controller).SingleOrDefault()?.FullName;
 
-				ObjectHandle tclass = Activator.CreateInstance(an.Name, ClassName);
-
 				Type type = asm.GetType(ClassName);
 
-				object unwc = tclass.Unwrap();
+				services.Register(type, type);
+
+				var unwc = services.Create(type);
 
 				((Controller)unwc).Context = ct;
 
 				if (ct.Action != null)
 				{
-					object[] prms = ct.Params.ToList().ConvertAll(x => x.Value).ToArray();
+					object[] prms = ct.Params?.ToList().ConvertAll(x => x.Value).ToArray();
 
 					StringResult r = new StringResult { Content = type.GetMethod(ct.Action).Invoke(unwc, prms).ToString() };
 					return r;
@@ -52,6 +58,5 @@ namespace Server
 			}
 			return new StringResult {Content = "" };
 		}
-		
 	}
 }
