@@ -24,12 +24,9 @@ namespace IoC
 
         private object Create(Type type)
         {
-            //Find a default constructor using reflection
             var concreteType = types[type];
             var defaultConstructor = concreteType.GetConstructors()[0];
-            //Verify if the default constructor requires params
             var defaultParams = defaultConstructor.GetParameters();
-            //Instantiate all constructor parameters using recursion
             var parameters = defaultParams.Select(param => Create(param.ParameterType)).ToArray();
 
             return defaultConstructor.Invoke(parameters);
