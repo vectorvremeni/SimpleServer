@@ -1,6 +1,7 @@
 ﻿using GNGame;
 using IoC;
 using Server;
+using Server.MVC;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,17 +20,40 @@ namespace ConsoleApp3
 		/// <summary>
 		/// наша игра ходилка
 		/// </summary>
-		public static GoGame game;
 		static String SiteFolder = "Files";
+		static MiddlewareContainer App = new MiddlewareContainer();
 
 		static void Main(string[] args)
 		{
 			var container = new IoCContainer();
 			ControllerFactory factory = new ControllerFactory(container);
 
-			container.Register<IRenderer,HTMLRenderer>();
+			container.Register<IRenderer, HTMLRenderer>();
 			container.RegisterSingleton<GoGame, GoGame>();
 			container.RegisterSingleton<GuessGame, GuessGame>();
+
+			GoGame game = container.Create<GoGame>();
+			game.Init(5, 5);
+
+			App.Add(x =>
+			{
+				if (x.RawURL.Contains("favicon.ico"))
+				{
+					x.RawURL = "";
+				}
+				return x;
+			});
+
+			App.Add(x =>
+			{
+				x.RawURL = x.RawURL.TrimStart('/');
+				return x;
+			});
+
+			App.Add(x => 
+			{
+				return HTTPContext.GetContext(x.RawURL);
+			});
 
 			// создаём HTML версию рендерера
 			HTMLRenderer r = new HTMLRenderer();
@@ -70,14 +94,20 @@ namespace ConsoleApp3
 				String responsestring = "";
 
 				// убираем / вначале, чтобы переиспользовать эту строку в нескольких местах
-				String TrimmedURL = rawurl.TrimStart('/');
+
+
+				App.Init(new HTTPContext {RawURL = rawurl});
+				App.Run();
+
+				HTTPContext ct = App.GetContext();
+
 
 				// дальше идёт ветвление на MVC и просто файлы: если запрошен какойто файл, отдаём его. если нет точки в строке (признак расширения файла) то идём на MVC
 				if (!rawurl.Contains('.'))
 				{
 					try
 					{
-						IActionResult mvcres = factory.GetResult(TrimmedURL);
+						IActionResult mvcres = factory.GetResult(ct);
 						responsestring = mvcres.Content;
 					}
 					catch (Exception e)
@@ -87,16 +117,14 @@ namespace ConsoleApp3
 				}
 				else
 				{
-					if (TrimmedURL == "favicon.ico")
+					if (ct.RawURL == "favicon.ico")
 					{
 						responsestring = "";
 					}
 					else
 					{
-						// веточка не MVC, старый тип запуска игр
 
-						// идём игроком (выполняем команду с клиента)
-						game.MoveUser(TrimmedURL);
+						game.MoveUser(rawurl.TrimStart('/'));
 
 						// рендерим поле
 						String GameField = game.RenderField();
@@ -173,6 +201,43 @@ namespace ConsoleApp3
 			// тут немного усложним - есть специальный сборщик, Path
 			String res = Path.Combine( Program.SiteFolder,filename + ".html");
 			return res;
+		}
+	}
+
+	public class Middlware
+	{
+		public Func<HTTPContext, HTTPContext> UseMethod;
+        public Middlware(Func<HTTPContext,HTTPContext> n)
+        {
+			UseMethod = n;
+        }
+	}
+
+	public class MiddlewareContainer
+	{
+		public static List<Middlware> MDWS = new List<Middlware>();
+		public HTTPContext context;
+
+		public void Init(HTTPContext context)
+		{
+			this.context = context;
+		}
+		public void Add(Func<HTTPContext, HTTPContext> f)
+		{
+			Middlware m = new Middlware(f);
+			MDWS.Add(m);
+		}
+		public HTTPContext GetContext()
+		{
+			return context;
+		}
+
+		public void Run()
+		{
+			MDWS.ForEach(x =>
+			{
+				context = x.UseMethod(context);
+			});
 		}
 	}
 }

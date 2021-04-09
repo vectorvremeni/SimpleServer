@@ -14,6 +14,8 @@ namespace Server.MVC
       
         public Dictionary<String,String> Params { get; set; }
 
+		public String RawURL = "";
+
         public static HTTPContext GetContext(String URL)
 		{
 			HTTPContext c = new HTTPContext();

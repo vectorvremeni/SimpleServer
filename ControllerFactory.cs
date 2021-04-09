@@ -26,10 +26,8 @@ namespace Server
         {
 			this.services = services;
         }
-		public IActionResult GetResult(String URL)
+		public IActionResult GetResult(HTTPContext ct)
 		{
-			HTTPContext ct = HTTPContext.GetContext(URL);
-
 			if (ct != null)
 			{
 				Assembly asm = Assembly.GetCallingAssembly();
