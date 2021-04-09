@@ -27,7 +27,10 @@ namespace Server.MVC
 
 			if (s.Length > 1)
 			{
-				c.Action = s[1];
+				if (!String.IsNullOrWhiteSpace(s[1]))
+				{
+					c.Action = s[1];
+				}
 			}
 
 			if (s.Length > 2)
@@ -43,7 +46,10 @@ namespace Server.MVC
 					}
 					else
 					{
-						tobj.Add(ttp[0],"");
+						if (!String.IsNullOrWhiteSpace(ttp[0]))
+						{
+							tobj.Add("par"+tp.Length, ttp[0]);
+						}
 					}
 				}
 				c.Params = tobj;

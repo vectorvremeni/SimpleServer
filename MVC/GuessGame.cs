@@ -1,4 +1,5 @@
-﻿using Server.MVC;
+﻿using GNGame;
+using Server.MVC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,23 @@ using System.Threading.Tasks;
 
 namespace Server.MVC
 {
-    public class GuessGame:Controller
+    public class GG:Controller
     {
-        public String Index()
+        GuessGame g;
+        public GG(GuessGame gg)
         {
-            return "Hi from GuessGame:Index";
+            g = gg;
+        }
+
+        public String Init()
+        {
+            g.init(5);
+            return "game init complete";
+        }
+        public String Guess(String num)
+        {
+            String res = g.guess(int.Parse(num));
+            return res;
         }
 
         public String Play()

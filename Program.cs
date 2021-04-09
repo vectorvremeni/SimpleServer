@@ -1,7 +1,6 @@
 ﻿using GNGame;
 using IoC;
 using Server;
-using Server.MVC;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -29,7 +28,8 @@ namespace ConsoleApp3
 			ControllerFactory factory = new ControllerFactory(container);
 
 			container.Register<IRenderer,HTMLRenderer>();
-			container.Register<GoGame, GoGame>();
+			container.RegisterSingleton<GoGame, GoGame>();
+			container.RegisterSingleton<GuessGame, GuessGame>();
 
 			// создаём HTML версию рендерера
 			HTMLRenderer r = new HTMLRenderer();

@@ -10,11 +10,22 @@ namespace IoC
 {
     public class IoCContainer
     {
-        private readonly Dictionary<Type, Type> types = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Service> types = new Dictionary<Type, Service>();
 
         public void Register<TInterface, TImplementation>()
         {
-            types[typeof(TInterface)] = typeof(TImplementation);
+            Service s = new Service();
+            s.service = typeof(TImplementation);
+            s.ServiceType = Service.Transient;
+            types[typeof(TInterface)] = s;
+        }
+
+        public void RegisterSingleton<TInterface, TImplementation>()
+        {
+            Service s = new Service();
+            s.service = typeof(TImplementation);
+            s.ServiceType = Service.Singleton;
+            types[typeof(TInterface)] = s;
         }
 
         public TInterface Create<TInterface>()
@@ -25,16 +36,39 @@ namespace IoC
         public object Create(Type type)
         {
             var concreteType = types[type];
-            var defaultConstructor = concreteType.GetConstructors()[0];
-            var defaultParams = defaultConstructor.GetParameters();
-            var parameters = defaultParams.Select(param => Create(param.ParameterType)).ToArray();
 
-            return defaultConstructor.Invoke(parameters);
+            if (concreteType.Initialized == false || concreteType.ServiceType == Service.Transient)
+            {
+                var defaultConstructor = concreteType.service.GetConstructors()[0];
+                var defaultParams = defaultConstructor.GetParameters();
+                var parameters = defaultParams.Select(param => Create(param.ParameterType)).ToArray();
+                concreteType.Initialized = true;
+                concreteType.Instance = defaultConstructor.Invoke(parameters);
+                return concreteType.Instance;
+            }
+            else
+            {
+                return concreteType.Instance;
+            }
         }
 
         public void Register(Type type, Type instance)
         {
-            types[type] = instance;
+            Service s = new Service();
+            s.ServiceType = Service.Singleton;
+            s.service = instance;
+            types[type] = s;
         }
+    }
+
+    public class Service
+    {
+        public Type service { get; set; }
+        public object Instance { get; set; }
+        public String ServiceType { get; set; }
+        public bool Initialized = false;
+
+        public static String Singleton="Singleton";
+        public static String Transient = "Transient";
     }
 }
