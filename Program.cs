@@ -75,27 +75,41 @@ namespace ConsoleApp3
 				// дальше идёт ветвление на MVC и просто файлы: если запрошен какойто файл, отдаём его. если нет точки в строке (признак расширения файла) то идём на MVC
 				if (!rawurl.Contains('.'))
 				{
-					IActionResult mvcres = factory.GetResult(TrimmedURL);
-					responsestring = mvcres.Content;
+					try
+					{
+						IActionResult mvcres = factory.GetResult(TrimmedURL);
+						responsestring = mvcres.Content;
+					}
+					catch (Exception e)
+					{
+						responsestring = e.Message + Environment.NewLine + "<br/>" + e.StackTrace;
+					}
 				}
 				else
 				{
-					// веточка не MVC, старый тип запуска игр
-					
-					// идём игроком (выполняем команду с клиента)
-					game.MoveUser(TrimmedURL);
+					if (TrimmedURL == "favicon.ico")
+					{
+						responsestring = "";
+					}
+					else
+					{
+						// веточка не MVC, старый тип запуска игр
 
-					// рендерим поле
-					String GameField = game.RenderField();
+						// идём игроком (выполняем команду с клиента)
+						game.MoveUser(TrimmedURL);
 
-					//получаем файл-шаблон для нашей игры
-					String tfile = GetFileContent("Game");
+						// рендерим поле
+						String GameField = game.RenderField();
 
-					//заменяем там тэг "<game /> на отрендеренное игровое поле
-					tfile = tfile.Replace("<game />", GameField);
+						//получаем файл-шаблон для нашей игры
+						String tfile = GetFileContent("Game");
 
-					//заполняем строку вывода на клиент
-					responsestring = tfile;
+						//заменяем там тэг "<game /> на отрендеренное игровое поле
+						tfile = tfile.Replace("<game />", GameField);
+
+						//заполняем строку вывода на клиент
+						responsestring = tfile;
+					}
 				}
 
 				// получаем ответ клиенту из контекста

@@ -12,7 +12,7 @@ namespace IoC
     {
         private readonly Dictionary<Type, Type> types = new Dictionary<Type, Type>();
 
-        public void Register<TInterface, TImplementation>() where TImplementation : TInterface
+        public void Register<TInterface, TImplementation>()
         {
             types[typeof(TInterface)] = typeof(TImplementation);
         }
