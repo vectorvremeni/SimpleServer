@@ -28,7 +28,6 @@ namespace GameTests
 			String test = welcomer.SayHelloTo("World");
 
             Assert.AreEqual($"Hello {w}!", test);
-
 		}
 	}
 
