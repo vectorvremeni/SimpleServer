@@ -15,13 +15,27 @@ namespace ConsoleApp3
 {
 	class Program
 	{
-		
+		static MiddlewareContainer App = new MiddlewareContainer();
 		public static GoGame game;
 		static String SiteFolder = "Files";
 
 		static void Main(string[] args)
 		{
-			
+			App.Add(x =>
+			{
+				return new HTTPContext {RawURL=""};
+			});
+
+			App.Add(x =>
+			{
+				return new HTTPContext {RawURL=x.RawURL.TrimStart('/') };
+			});
+
+			App.Add(x =>
+			{
+				return HTTPContext.CreateContext(x.RawURL);
+			});
+
 			HTMLRenderer r = new HTMLRenderer();
 			
 			game = new GoGame(r);
@@ -40,13 +54,15 @@ namespace ConsoleApp3
 
 				String rawurl = request.RawUrl;
 
+				App.Init(rawurl);
+
 				String responsestring = "";
 
-				String TrimmedURL = rawurl.TrimStart('/');
+				App.Run();
 
 				if (!rawurl.Contains('.'))
 				{
-					HTTPContext ct = GetContext(TrimmedURL);
+					HTTPContext ct = App.GetContext();
 
 					if (ct != null)
 					{
@@ -77,8 +93,7 @@ namespace ConsoleApp3
 				}
 				else
 				{
-					
-					game.MoveUser(TrimmedURL);
+					game.MoveUser(App.GetContext().RawURL);
 					String GameField = game.RenderField();
 
 					String tfile = GetFileContent("Game");
@@ -100,73 +115,57 @@ namespace ConsoleApp3
 			}
 		}
 
-		private static HTTPContext GetContext(String URL)
-		{
-			// создаём наш контекст
-			HTTPContext c = new HTTPContext();
+		
 
-			// разбиваем строку на части
-			String[] s = URL.Split('/');
-
-			// если там одна часть, то это имя контроллера
-			if (s.Length > 0)
-			{
-				// заполняем его
-				c.Controller = s[0];
-			}
-
-			// если там две части
-			if (s.Length > 1)
-			{
-				// то заполняем вторую - Action
-				c.Action = s[1];
-			}
-
-			// если есть ещё и третья, то пользователь передал параметр, кладём его пока просто в одну переменную
-			if (s.Length > 2)
-			{
-				c.Params = s[2];
-			}
-
-			// возвращаем готовый заполненный объект HTTPContext
-			return c;
-		}
-
-		/// <summary>
-		/// получаем содержимое файла по имени
-		/// </summary>
-		/// <param name="filename"></param>
-		/// <returns></returns>
 		static String GetFileContent(String filename)
 		{
-			// собираем имя файла из имени папки где хранятся файлы (чтобы не было бардака) и самого имени
 			String temp = AssembleFileName(filename);
 
-			// если такой файл существует
 			if (File.Exists(temp))
 			{
-				// читаем его содержимое и возвращаем
 				String stringtemp = File.ReadAllText(temp);
 				return stringtemp;
 			}
 			else
 			{
-				// если нет (это обычно favicon.ico который запрашивает браузер автоматически, или мы неправильно указали имя файла), то возвращаем пустую строку
 				return "";
 			}
-
 		}
 
-		/// <summary>
-		/// я не хочу думать о том, как собрать из названия папки где файлы и самого файла полный путь, поэтому эта функция будет отвечать за это
-		/// </summary>
-		/// <param name="filename"></param>
-		/// <returns></returns>
+		
 		static String AssembleFileName(String filename)
 		{
-			// тут немного усложним - есть специальный сборщик, Path
 			String res = Path.Combine( Program.SiteFolder,filename + ".html");
 			return res;
 		}
 	}
+	public class MiddlewareContainer
+    {
+		public List<Func<HTTPContext, HTTPContext>> Handlers = new List<Func<HTTPContext, HTTPContext>>();
+
+		public void Init(String URL)
+        {
+			this.Context = new HTTPContext {RawURL=URL};
+        }
+
+		private HTTPContext Context;
+
+		public void Add(Func<HTTPContext, HTTPContext> f)
+        {
+			Handlers.Add(f);
+        }
+
+		public void Run()
+        {
+			Handlers.ForEach(x =>
+			{
+				Context = x(Context);
+			});
+        }
+
+		public HTTPContext GetContext()
+        {
+			return Context;
+        }
+    }
 }

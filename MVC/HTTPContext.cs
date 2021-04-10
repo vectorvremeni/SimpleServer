@@ -6,23 +6,44 @@ using System.Threading.Tasks;
 
 namespace Server.MVC
 {
-    /// <summary>
-    /// тут мы будем хранить информацию о том, что хочет пользователь
-    /// </summary>
     public class HTTPContext
     {
-        /// <summary>
-        /// он хочет чтобы сервер создал этот контроллер
-        /// если пользователь ничего не передал, то вызываем контроллер поумолчанию - Home
-        /// </summary>
         public String Controller { get; set; } = "Home";
-        /// <summary>
-        /// вызвал у него этот метод (если ничего не передали, то Index - таким образом, если мы хотим просто) зайти на сайт то нам не надо указывать ничего, просто название сайта
-        /// </summary>
         public String Action { get; set; } = "Index";
-        /// <summary>
-        /// и передал ему эти параметры
-        /// </summary>
         public String Params { get; set; }
-    }
+
+        public String RawURL = null;
+
+		public static HTTPContext CreateContext(String URL)
+		{
+			HTTPContext c = new HTTPContext();
+
+			String[] s = URL.Split('/');
+
+			if (s.Length > 0)
+			{
+				if (!String.IsNullOrWhiteSpace(s[0]))
+				{
+					c.Controller = s[0];
+				}
+			}
+
+			if (s.Length > 1)
+			{
+				if (!String.IsNullOrWhiteSpace(s[1]))
+				{
+					c.Action = s[1];
+				}
+			}
+
+			if (s.Length > 2)
+			{
+				c.Params = s[2];
+			}
+
+			c.RawURL = URL;
+
+			return c;
+		}
+	}
 }
