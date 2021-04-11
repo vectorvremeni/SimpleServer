@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using TheGame;
 
 namespace ConsoleGame
@@ -19,6 +21,28 @@ namespace ConsoleGame
             String temp = g.RenderField();
 
             Console.WriteLine(temp);
+
+            var t = test<int>().GetEnumerator();
+
+            Console.WriteLine(t.MoveAndGet());
+            Console.WriteLine(t.MoveAndGet());
+            Console.WriteLine(t.MoveAndGet());
+        }
+
+        public static IEnumerable test<T>()
+        {
+            yield return 3;
+            yield return 5;
+            yield return 8;
+        }
+    }
+
+    public static class Extenstion
+    {
+        public static object MoveAndGet(this IEnumerator t)
+        {
+            t.MoveNext();
+            return t.Current;
         }
     }
 }
