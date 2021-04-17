@@ -23,11 +23,6 @@ namespace ConsoleApp3
 		{
 			App.Add(x =>
 			{
-				return new HTTPContext {RawURL=""};
-			});
-
-			App.Add(x =>
-			{
 				return new HTTPContext {RawURL=x.RawURL.TrimStart('/') };
 			});
 
@@ -66,29 +61,7 @@ namespace ConsoleApp3
 
 					if (ct != null)
 					{
-						Assembly asm = Assembly.GetCallingAssembly();
-
-						List<TypeInfo> Controllers = asm.DefinedTypes.Where(x => x.BaseType == typeof(Controller)).ToList();
-
-						AssemblyName an = asm.GetName();
-
-						String ClassName = Controllers
-							.Where(x => x.Name == ct.Controller)
-							.SingleOrDefault()? 
-							.FullName;
-
-						ObjectHandle tclass = Activator.CreateInstance(an.Name, ClassName);
-
-						Type type = asm.GetType(ClassName);
-
-						object unwc = tclass.Unwrap();
-
-						((Controller)unwc).Context = ct;
-
-						if (ct.Action != null)
-						{
-							responsestring = type.GetMethod(ct.Action).Invoke(unwc, null).ToString();
-						}
+						responsestring = new ControllerFactory().Execute(ct);
 					}
 				}
 				else
